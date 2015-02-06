@@ -1,1 +1,4 @@
-{ "hello": "Привет" }
+{ 
+	"hello": "Привет",
+	"footer": "(c) Александр Ющенко <sahkaa@gmail.com>"
+}
