@@ -1,5 +1,6 @@
 { 
 	"hello": "Hey there",
-	"hello": "Welcome to Modus - Social Networking Map",
-	"footer": "(c) Alexander Yushchenko  <sahkaa@gmail.com>"
+	"welcome": "Welcome to Modus - Social Networking Map",
+	"footer": "(c) Alexander Yushchenko  <sahkaa@gmail.com>",
+	"messages": "Messages"
 }

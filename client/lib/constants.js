@@ -6,6 +6,6 @@ if (Meteor.App) {
 
 Meteor.App = {
   NAME: 'ModusMap',
-  DESCRIPTION: 'Social network map',
+  DESCRIPTION: 'Social networking map',
   AUTHORS: 'Alexander Yushchenko <sahkaa@gmail.com>'
 };
