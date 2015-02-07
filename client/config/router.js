@@ -12,8 +12,6 @@ Router.route("/(.*)", {
     name: "notFound"
 });
 
-
-Router.onBeforeAction(requireLogin, {only: 'messages'});
 var requireLogin = function() {
  	if (! Meteor.user()) {
 		if (Meteor.loggingIn()) {
@@ -25,3 +23,5 @@ var requireLogin = function() {
 		this.next();
 	}
 }
+
+Router.onBeforeAction(requireLogin, {only: 'messages'});
