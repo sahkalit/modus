@@ -1,3 +1,5 @@
 Meteor.publish('Conversations', function () {
-  return Conversations.find();
+  return Conversations.find({
+  	"members.userId": {$in: Meteor.userId()}
+  });
 });

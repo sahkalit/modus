@@ -1,0 +1,33 @@
+<template name="chat">
+	<div class="panel panel-info">
+		<div class="panel-body">
+			<div class="media-list">
+				{{#each messages}}
+					<li class="media">
+						<div class="media-body">
+							<div class="media">
+								<a class="pull-left" href="#">
+									<img class="media-object img-circle" src="imageSrc">
+								</a>
+								<div class="media-body">
+					                	Message
+									<br>
+									<small class="text-muted">Name User | Date</small>
+									<hr />
+								</div>
+							</div>
+						</div>
+					</li>
+				{{/each}}
+			</div>
+		</div>
+		<div class="panel-footer">
+          	<div class="input-group">
+				<input type="text" class="form-control" placeholder="{{_ "enter_message"}}" />
+				<span class="input-group-btn">
+					<button class="btn btn-info" type="button">{{_ "send"}}</button>
+				</span>
+			</div>
+		</div>
+	</div>
+</template>

@@ -2,5 +2,8 @@
 	"hello": "Hey there",
 	"welcome": "Welcome to Modus - Social Networking Map",
 	"footer": "(c) Alexander Yushchenko  <sahkaa@gmail.com>",
-	"messages": "Messages"
+	"messages": "Messages",
+	"history": "History",
+	"send": "Send",
+	"enter_message": "Enter Message"
 }

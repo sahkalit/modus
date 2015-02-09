@@ -6,7 +6,27 @@ Router.configure({
 
 
 Router.route('/', {name: 'home'});
-Router.route('/messages', {name: 'messages'});
+Router.route('/messages', {
+	name: 'messages',
+	template: 'messages',
+	waitOn: function() {
+    	return Meteor.subscribe('Conversation');
+  	},
+  	data: function() {
+  		return Conversation.find({}, {sort: {modifiedAt: -1}});
+  	}
+});
+
+Router.route('/messages/:_id', {
+	name: 'chat',
+	template: 'messages',
+	waitOn: function() {
+    	return Meteor.subscribe('MessagesByConversation', this._id);
+  	},
+  	data: function() {
+  		return Messages.find({conversationId: this._id}, {sort: {modifiedAt: -1}});
+  	}
+});
 
 Router.route("/(.*)", {
     name: "notFound"

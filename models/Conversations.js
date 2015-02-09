@@ -1,12 +1,18 @@
 Conversations = new Mongo.Collection('conversations');
 
+Conversations.helpers({
+  members: function() {
+    return Meteor.users.find({members: {$in: this.members}});
+  },
+  creator: function() {
+    return Meteor.users.findOne({_id: this.creatorId})
+  }
+});
+
 Conversations.attachSchema(
     new SimpleSchema({
-      title: {
-        type: String
-      },
       members: {
-          type: [Object]
+        type: [Object]
       },
       "members.$.userId": {
         type: String
@@ -29,7 +35,7 @@ Conversations.attachSchema(
 if (Meteor.isServer) {
   Conversations.allow({
     insert : function () {
-      return true;
+      return false;
     },
     update : function () {
       return false;
