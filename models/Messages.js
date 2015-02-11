@@ -1,27 +1,25 @@
 Messages = new Mongo.Collection('messages');
 
 Messages.helpers({
-  members: function() {
+  users: function() {
     return Meteor.users.find(
-      {members: {$in: this.members}},
-      {fields: publishedFieldsUsers}
+      {_id: {$in: this.userIds}}
     );
   },
   creator: function() {
     return Meteor.users.findOne(
-      {_id: this.creatorId},
-      {fields: publishedFieldsUsers}
+      {_id: this.creatorId}
     );
   }
 });
 
 Messages.attachSchema(
     new SimpleSchema({
-      members: {
+      userIds: {
         type: [Object],
         denyUpdate: true
       },
-      "members.$.userId": {
+      "userIds.$": {
         type: String
       },
       notRead: {
@@ -41,20 +39,12 @@ Messages.attachSchema(
         type: Date,
         denyUpdate: true
       },
-      conversationId: {
+      chatId: {
         type: String,
         denyUpdate: true
       }
   })
 );
-
-publishedFieldsMessages = {
-    members: true,
-    creatorId: true,
-    message: true,
-    createdAt: true,
-    conversationId: true
-};
 
 // Collection2 already does schema checking
 // Add custom permission rules if needed

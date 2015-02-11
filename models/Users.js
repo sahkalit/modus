@@ -1,8 +1,3 @@
-publishedFieldsUsers = {
-    _id: 1,
-    username: 1
-};
-
 Schema = {};
 
 Schema.UserCountry = new SimpleSchema({
@@ -88,4 +83,3 @@ Schema.User = new SimpleSchema({
 });
 
 Meteor.users.attachSchema(Schema.User);
-

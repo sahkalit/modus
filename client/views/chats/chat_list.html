@@ -1,0 +1,26 @@
+<template name="chatsList">
+	<div class="panel panel-primary">
+		<div class="panel-heading">
+			{{_ "history"}}
+		</div>
+		<div class="panel-body">
+			<ul class="media-list">
+				{{#each chats}}
+					<li class="media">
+						<div class="media-body">
+							<div class="media">
+								<a class="pull-left" href="#">
+									<img class="media-object img-circle" style="max-height:40px;" src="userImg">
+								</a>
+								<div class="media-body">
+									<a href="{{pathFor 'chatTalk' interlocutor._id}}" class="list-group-item">{{creator.username}}</a>
+								 	<small class="text-muted">Active From 3 hours</small>
+								</div>
+							</div>
+						</div>
+					</li>
+				{{/each}}
+			</ul>
+		</div>
+	</div>
+</template>

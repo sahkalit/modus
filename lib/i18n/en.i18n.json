@@ -3,7 +3,11 @@
 	"welcome": "Welcome to Modus - Social Networking Map",
 	"footer": "(c) Alexander Yushchenko  <sahkaa@gmail.com>",
 	"messages": "Messages",
+	"message_send": "Send Message",
+	"enter_message": "Enter Message",
+	"user_profile": "Profile",
+
 	"history": "History",
 	"send": "Send",
-	"enter_message": "Enter Message"
+	"users_nearest_online": "Users Online"
 }

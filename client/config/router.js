@@ -1,35 +1,64 @@
 Router.configure({
-    layoutTemplate: 'basicLayout',
-    loadingTemplate: 'loading',
-    notFoundTemplate: 'notFound'
+	layoutTemplate: 'basicLayout',
+	loadingTemplate: 'loading',
+	notFoundTemplate: 'notFound'
 });
 
-
-Router.route('/', {name: 'home'});
-Router.route('/messages', {
-	name: 'messages',
-	template: 'messages',
+Router.route('/', {
+	name: 'home',
 	waitOn: function() {
-    	return Meteor.subscribe('Conversation');
-  	},
-  	data: function() {
-  		return Conversation.find({}, {sort: {modifiedAt: -1}});
-  	}
+		return Meteor.subscribe('usersNear');
+	},
+	data: function() {
+		return Meteor.users.find();
+	}
 });
 
-Router.route('/messages/:_id', {
-	name: 'chat',
-	template: 'messages',
+Router.route('/users', {
+	name: 'users',
+  	template: 'users_list',
 	waitOn: function() {
-    	return Meteor.subscribe('MessagesByConversation', this._id);
-  	},
-  	data: function() {
-  		return Messages.find({conversationId: this._id}, {sort: {modifiedAt: -1}});
-  	}
+		return Meteor.subscribe('usersNear');
+	},
+	data: function() {
+		return Meteor.users.find();
+	}
 });
 
-Router.route("/(.*)", {
-    name: "notFound"
+
+Router.route('/chats', {
+	name: 'chats',	
+	waitOn: function() {
+		return Meteor.subscribe('chats');
+	},
+	data: function() {
+		return Chats.find({}, {sort: {modifiedAt: -1}});
+	}
+});
+
+Router.route('/chats/:username', {
+	name: 'chatTalk',
+	template: 'chats',
+	waitOn: function() {
+		return [Meteor.subscribe('chatByUsers', [this.params.username, Meteor.userId()]), Meteor.subscribe('userByUsername', this.params.username)];
+	},
+	data: function() {
+		return {
+			chat: return Chats.queries.chatByUsers([this.params.username, Meteor.userId()]),
+			interlocutor: return Meteor.users().find({ username: this.params.username});
+		};
+	}
+});
+
+
+Router.route("/:username", {
+	name: "userProfile",
+	waitOn: function() {
+	 	return Meteor.subscribe('userByUsername', this.params.username); 
+	},
+	data: function() {
+		return Meteor.users.findOne({username: this.params.username});
+	}	
 });
 
 var requireLogin = function() {
@@ -44,4 +73,5 @@ var requireLogin = function() {
 	}
 }
 
-Router.onBeforeAction(requireLogin, {only: 'messages'});
+Router.onBeforeAction('dataNotFound', {only: 'userProfile'});
+Router.onBeforeAction(requireLogin, {only: 'chats'});
