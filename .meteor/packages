@@ -24,3 +24,5 @@ ian:accounts-ui-bootstrap-3
 sacha:spin
 tap:i18n
 sewdn:collection-behaviours
+reactive-var
+matb33:collection-hooks

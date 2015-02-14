@@ -36,28 +36,33 @@ Router.route('/chats', {
 	}
 });
 
-Router.route('/chats/:username', {
+Router.route('/chats/:_id', {
 	name: 'chatTalk',
 	template: 'chats',
 	waitOn: function() {
-		return [Meteor.subscribe('chatByUsers', [this.params.username, Meteor.userId()]), Meteor.subscribe('userByUsername', this.params.username)];
+		return [			
+			Meteor.subscribe('chatByUsers', [this.params._id, Meteor.userId()]),
+			Meteor.subscribe('usersByIds', [this.params._id]),
+			Meteor.subscribe('chats')
+		];
 	},
 	data: function() {
 		return {
-			chat: return Chats.queries.chatByUsers([this.params.username, Meteor.userId()]),
-			interlocutor: return Meteor.users().find({ username: this.params.username});
+			chat: function() { return Chats.queries.chatByUsers([Router.current().params._id, Meteor.userId()]).fetch()[0] },
+			interlocutor: function() { return Meteor.users.findOne({ _id: Router.current().params._id}); },
+			chatsList: function() { return Chats.find()}
 		};
 	}
 });
 
 
-Router.route("/:username", {
+Router.route("/:_id", {
 	name: "userProfile",
 	waitOn: function() {
-	 	return Meteor.subscribe('userByUsername', this.params.username); 
+	 	return Meteor.subscribe('usersByIds', [this.params._id]); 
 	},
 	data: function() {
-		return Meteor.users.findOne({username: this.params.username});
+		return Meteor.users.findOne({_id: this.params._id});
 	}	
 });
 

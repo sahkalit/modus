@@ -1,14 +1,12 @@
-<template name="chats">
-	<div class="container-fluid">
-  		<div class="row">
-    		<div class="col-xs-12 col-sm-4 col-md-3 col-lg-2 {{isActiveRoute regex='chatTalk' className='hidden-xs'}}">
-    			{{> chatsList}}
-    		</div>
-    		{{#if isActiveRoute regex='chatTalk'}}
-	    		<div class="col-xs-12 col-sm-8 col-md-9 col-lg-10 {{isActiveRoute regex='chats' className='hidden-xs'}}">
-	    			{{> chatTalk}}
-	    		</div>
-    	  {{/if}}
-      </div>
-  </div>
+<template name="chats">	
+	<div class="row">
+		<div class="col-xs-12 col-sm-4 col-md-4 col-lg-4 {{isActiveRoute regex='chatTalk' className='hidden-xs'}}">
+			{{> chatsList}}
+		</div>
+		{{#if isActiveRoute regex='chatTalk'}}
+			<div class="col-xs-12 col-sm-8 col-md-8 col-lg-8 {{isActiveRoute regex='chats' className='hidden-xs'}}">
+				{{> chatTalk}}
+			</div>
+		{{/if}}
+	</div>	
 </template>

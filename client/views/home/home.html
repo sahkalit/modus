@@ -1,9 +1,7 @@
-<template name="home">
-	<div class="container">
-		{{#if currentUser }}
-			{{> homeCurrentUser}}
-		{{else}}
-			{{> homeGuest}}		
-		{{/if}}
-	</div>
+<template name="home">	
+	{{#if currentUser }}
+		{{> homeCurrentUser}}
+	{{else}}
+		{{> homeGuest}}		
+	{{/if}}	
 </template>

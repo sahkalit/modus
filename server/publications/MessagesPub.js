@@ -1,14 +1,22 @@
 Meteor.publish('MessagesNew', function () {
 	return Messages.find({
-		notRead: {$in: this.userId()}
+		notRead: {$in: this.userId}
 	},  {
 		sort: {createdAt: -1}
 	});
 });
 
-Meteor.publish('messagesByUsers', function (userIds) {
+Meteor.publish('messagesByChat', function (chatId, limit) {
+	check(chatId, String);
+	check(limit, Number);
+
 	return Messages.find({
-		userIds: {$in: this.userId()},
-		chatId: chatId
-	});
+			chatId: chatId,
+			userIds: {$in: [this.userId]}
+		}, 
+		{
+			limit: limit,
+			sort: {createdAt: -1}
+		}
+	);
 });

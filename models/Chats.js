@@ -1,34 +1,36 @@
 Chats = new Mongo.Collection('chats');
 
 Chats.helpers({
-	users: function() {
+	users: function() {		
 		return Meteor.users.find({_id: {$in: this.userIds}});
 	},
 	creator: function() {
 		return Meteor.users.findOne({_id: this.creatorId})
 	},
-	interlocutor: function() {
-		return Meteor.users.findOne({_id: _.without(this.userIds, [Meteor.userId()])[0]});
+	interlocutor: function() {		
+		return Meteor.users.findOne({_id: _.without(this.userIds, [Meteor.userId()])[0]}) || Meteor.user();
 	}
 });
 
 Chats.attachSchema(
 	new SimpleSchema({
 		userIds: {
-		type: [Object]
-		},
-		"userIds.$": {
-		type: String
-		},
+			type: [String],
+			denyUpdate: true
+		},		
 		creatorId: {
-		type: String
+			type: String,
+			denyUpdate: true
 		},
 		createdAt: {
-		type: Date,
-		denyUpdate: true
+			type: Number,
+			denyUpdate: true
 		},
 		modifiedAt: {
-		type: Date      
+			type: Number      
+		}, 
+		countMessages: {
+			type: Number
 		}
 	})
 );
@@ -36,7 +38,6 @@ Chats.attachSchema(
 Chats.queries = {
 	chatByUsers: function (userIds) {
 		check(userIds, [String]);
-	
 		return Chats.find({
 			$and: [
 				{userIds: {$all: userIds}},
@@ -50,11 +51,15 @@ Chats.queries = {
 // Add custom permission rules if needed
 if (Meteor.isServer) {
 	Chats.allow({
-	insert : function () {
-		return false;
+	insert : function (userId, doc) {
+		check(arguments, [Match.Any]);
+
+		return -1 !== doc.userIds.indexOf(userId);
 	},
-	update : function () {
-		return false;
+	update : function (userId, doc) {
+		check(arguments, [Match.Any]);
+		
+		return -1 !== doc.userIds.indexOf(userId);
 	},
 	remove : function () {
 		return false;
