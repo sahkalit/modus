@@ -1,5 +1,5 @@
 Template.chatsList.helpers({
 	isCurrent: function() {
-		return Template.parentData().chat() && (Template.parentData().chat()._id === this._id);
+		return Template.parentData(2).chat() && (Template.parentData(2).chat().interlocutorId() === this._id);
 	}
 });

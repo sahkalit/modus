@@ -1,42 +1,75 @@
 Template.chatTalk.events({
 	'click button.ms-message-send': function(e) {
 		e.preventDefault();
-		
 		var message = {
 			message: $(e.target).closest('.input-group').find('input.ms-message-text').val(),
 			userIds: [Template.currentData().interlocutor()._id, Meteor.userId()],
 			chatId: Template.currentData().chat()._id
 		};
-		Messages.insert(message);
-	}, 
+
+		if (! message.message)
+			return;
+
+		Meteor.call('sendMessage', message);
+
+		$(e.target).closest('.input-group').find('input.ms-message-text').val('');
+		$('body').scrollTop(parseInt($('div.media-list').height()));	
+	},
+	'keyup input.ms-message-text': function(event, instance) {
+		if(event.keyCode == '13'){			
+			$('button.ms-message-send').click();
+		}
+	},
 	'click .load-more': function (event, instance) {
 		event.preventDefault();
 		
 		var limit = Template.instance().messages.count();
-		limit += Template.instance().countOnLoad;
-		instance.limit.set(limit);
+		limit += Template.instance().limitStep;		
+
+		var subscription = Meteor.subscribe('messagesByChatDiscard', instance.data.chat()._id, limit);
+		this.autorun(function(c) {
+			if (subscription.ready()) {
+				var message = Messages.findOne({chatId: instance.data.chat()._id}, {sort: {createdAt: 1}});
+				instance.discardCreatedAt.set(message.createdAt);
+
+				c.stop();
+			}
+		});
   }
 });
 
 Template.chatTalk.created = function() {
 	var instance = this;
-	this.countOnLoad = 5;
-	this.limit = new ReactiveVar(this.countOnLoad);
+	this.limitStep = 5;
+	this.limit = new ReactiveVar(this.limitStep);	
 	this.ready =  new ReactiveVar(false);
+	this.discardCreatedAt = new ReactiveVar(false);
+	var subscription = Meteor.subscribe('messagesByChatDiscard', instance.data.chat()._id, instance.limit.get());
+	this.autorun(function(c) {			
+		if (subscription.ready()) {
+			var message = Messages.findOne({chatId: instance.data.chat()._id}, {sort: {createdAt: 1}});
+			if (message)
+				instance.discardCreatedAt.set(message.createdAt);
+			else
+				instance.discardCreatedAt.set(Date.now());
+			
+			c.stop();
+		}
+	});
 
 	this.autorun(function() {
-		console.log('hello');
+		if (! instance.discardCreatedAt.get())
+			return;
 
-		var subscription = Meteor.subscribe('messagesByChat', instance.data.chat()._id, instance.limit.get());
-
-		if (subscription.ready()) {
+		var subscriptionAll = Meteor.subscribe('messagesByChat', instance.data.chat()._id, instance.discardCreatedAt.get());
+		if (subscriptionAll.ready()) {
 			instance.ready.set(true);
-		} else {
+		} else {			
 			instance.ready.set(false);
 		}
 	});
 	
-	this.messages = Messages.find({chatId: Template.currentData().chat()._id}, {sort: {createdAt: 1}});
+	this.messages = Messages.find({chatId: this.data.chat()._id}, {sort: {createdAt: 1}});
 }
 
 Template.chatTalk.helpers({
@@ -50,3 +83,4 @@ Template.chatTalk.helpers({
 		return Template.instance().ready.get();
 	}
 });
+

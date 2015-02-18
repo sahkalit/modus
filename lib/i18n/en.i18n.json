@@ -6,6 +6,9 @@
 	"message_send": "Send Message",
 	"enter_message": "Enter Message",
 	"user_profile": "Profile",
+	"user_profile_gender": "Gender",
+	"user_profile_age": "Age",
+	"user_profile_about": "About",
 
 	"history": "History",
 	"send": "Send",

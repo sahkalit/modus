@@ -4,15 +4,11 @@ Messages = new Mongo.Collection('messages');
 	matb33:collection-hooks 
 */
 Messages.before.insert(function(userId, doc) {
-	check(arguments, [Match.Any]);
-	doc.createdAt = Date.now();
-	doc.creatorId = userId;
-	doc.notRead = _.without(doc.userIds, userId);	
-	// Chats.update(doc.chatId, {
-	// 		$inc: {countMessages: 1},
-	// 		modifiedAt: Date.now()
-	// 	}
-	// );
+	// check(arguments, [Match.Any]);	
+	// if (Meteor.isClient)
+	// 	throw new Meteor.Error('myErrorClient');
+
+	
 });
 
 
@@ -69,7 +65,8 @@ Messages.attachSchema(
 if (Meteor.isServer) {
 	Messages.allow({
 		insert : function (userId, doc) {
-			check(arguments, [Match.Any]);
+			check(arguments, [Match.Any]);		
+
 
 			return true;
 
@@ -89,3 +86,21 @@ if (Meteor.isServer) {
 		}
 	});
 }
+
+Meteor.methods({
+	'sendMessage': function(message) {
+		check(message, Match.Any);
+
+		message.createdAt = Date.now();
+		message.creatorId = this.userId;
+		message.notRead = _.without(message.userIds,  this.userId);
+		Chats.update(message.chatId, {
+			$set: {
+				$inc: {countMessages: 1},
+				modifiedAt: Date.now()
+			}
+		});
+
+		return Messages.insert(message);
+	}
+});

@@ -9,6 +9,9 @@ Chats.helpers({
 	},
 	interlocutor: function() {		
 		return Meteor.users.findOne({_id: _.without(this.userIds, [Meteor.userId()])[0]}) || Meteor.user();
+	},
+	interlocutorId: function() {		
+		return _.without(this.userIds, [Meteor.userId()])[0] || Meteor.userId();
 	}
 });
 

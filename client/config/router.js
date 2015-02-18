@@ -31,18 +31,26 @@ Router.route('/chats', {
 	waitOn: function() {
 		return Meteor.subscribe('chats');
 	},
+	// fastRender: true,
 	data: function() {
-		return Chats.find({}, {sort: {modifiedAt: -1}});
+		if (! Chats.findOne())
+			return {};
+
+		return {
+			chatsList: function() { return Chats.find({}, {sort: {modifiedAt: -1}}) },
+			chat: function() { return Chats.findOne() },
+			interlocutor: function() { return Chats.findOne().interlocutor(); }
+		}
 	}
 });
 
 Router.route('/chats/:_id', {
 	name: 'chatTalk',
 	template: 'chats',
+	// fastRender: true,
 	waitOn: function() {
 		return [			
-			Meteor.subscribe('chatByUsers', [this.params._id, Meteor.userId()]),
-			Meteor.subscribe('usersByIds', [this.params._id]),
+			Meteor.subscribe('chatByUsers', [this.params._id, Meteor.userId()]),			
 			Meteor.subscribe('chats')
 		];
 	},
