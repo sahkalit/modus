@@ -39,10 +39,13 @@ Chats.attachSchema(
 );
 	
 Chats.queries = {
-	chatByUsers: function (userIds) {
+	chatByUsers: function (creatorId, userIds) {
+		userIds = _.uniq(userIds);
+
 		check(userIds, [String]);
 		return Chats.find({
 			$and: [
+				{creatorId: creatorId},
 				{userIds: {$all: userIds}},
 				{userIds: {$size: userIds.length}}
 			]

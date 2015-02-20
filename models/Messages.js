@@ -1,19 +1,6 @@
 Messages = new Mongo.Collection('messages');
 
 /**
-	matb33:collection-hooks 
-*/
-Messages.before.insert(function(userId, doc) {
-	// check(arguments, [Match.Any]);	
-	// if (Meteor.isClient)
-	// 	throw new Meteor.Error('myErrorClient');
-
-	
-});
-
-
-
-/**
 dburles:collection-helpers
 */
 Messages.helpers({
@@ -65,23 +52,14 @@ Messages.attachSchema(
 if (Meteor.isServer) {
 	Messages.allow({
 		insert : function (userId, doc) {
-			check(arguments, [Match.Any]);		
-
-
-			return true;
-
 			check(userId, String);
 			chatUserIds = Chats.findOne(doc.chatId).userIds;
-			return (0 === _.difference(_.union(chatUserIds, doc.userIds), doc.userIds).length) && (doc.userIds.indexOf(userId) !== -1);
+			return (0 === _.difference(chatUserIds, doc.userIds).length) && (doc.userIds.indexOf(userId) !== -1);
 		},
 		update : function () {
-			check(arguments, [Match.Any]);
-
 			return false;
 		},
 		remove : function () {
-			check(arguments, [Match.Any]);
-
 			return false;
 		}
 	});
@@ -90,15 +68,13 @@ if (Meteor.isServer) {
 Meteor.methods({
 	'sendMessage': function(message) {
 		check(message, Match.Any);
-
+		
 		message.createdAt = Date.now();
 		message.creatorId = this.userId;
 		message.notRead = _.without(message.userIds,  this.userId);
-		Chats.update(message.chatId, {
-			$set: {
-				$inc: {countMessages: 1},
-				modifiedAt: Date.now()
-			}
+
+		Chats.update({_id: message.chatId}, {
+			$set: {modifiedAt: Date.now()}, $inc: {countMessages: 1}
 		});
 
 		return Messages.insert(message);

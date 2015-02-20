@@ -27,7 +27,7 @@ Template.chatTalk.events({
 		limit += Template.instance().limitStep;		
 
 		var subscription = Meteor.subscribe('messagesByChatDiscard', instance.data.chat()._id, limit);
-		this.autorun(function(c) {
+		Template.autorun(function(c) {
 			if (subscription.ready()) {
 				var message = Messages.findOne({chatId: instance.data.chat()._id}, {sort: {createdAt: 1}});
 				instance.discardCreatedAt.set(message.createdAt);

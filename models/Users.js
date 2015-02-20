@@ -51,6 +51,10 @@ Schema.UserProfile = new SimpleSchema({
 	country: {
 		type: Schema.UserCountry,
 		optional: true
+	},
+	location: {
+		type: String,
+		optional: true
 	}
 });
 
@@ -104,3 +108,20 @@ Meteor.users.helpers({
 		return age;
 	}
 });
+
+
+// Collection2 already does schema checking
+// Add custom permission rules if needed
+if (Meteor.isServer) {
+	Meteor.users.allow({
+		insert : function (userId, doc) {
+			return false;	
+		},
+		update : function (userId, doc, fieldNames, modifier) {
+			return doc._id === userId;			
+		},
+		remove : function () {
+			return false;
+		}
+	});
+}
