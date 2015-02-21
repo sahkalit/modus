@@ -23,3 +23,6 @@ ian:accounts-ui-bootstrap-3
 sacha:spin
 tap:i18n
 reactive-var
+cfs:standard-packages
+cfs:filesystem
+cfs:s3

@@ -5,6 +5,14 @@ Template.upSettings.helpers({
 });
 
 Template.upSettings.events({
+	'change .upload-photo': function(event, template) {
+		FS.Utility.eachFile(event, function(file) {
+			Images.insert(file, function (err, fileObj) {
+				//If !err, we have inserted new doc with ID fileObj._id, and
+				//kicked off the data upload using HTTP
+			});
+		});
+	},
 	'click input.btn-primary': function(e) {
 		e.preventDefault();
 
