@@ -3,16 +3,17 @@ Template.upSettings.helpers({
 		return this.emails.length && this.emails[0].address;
 	},
 	'avatar': function() {
-		return this.avatarLargeUrl().url;
+		return this.avatarLargeUrl();
 	}
 });
 
 Template.upSettings.events({
 	'change .upload-photo': function(event, template) {
 		FS.Utility.eachFile(event, function(file) {
-			var fileObj = Images.insert(file);
-
-			Meteor.users.update({_id: Meteor.userId()}, {$set: {"profile.avatars.large": fileObj._id}});
+			var fileObj = Images.insert(file, function(err, res) {
+				console.log(res);
+				Meteor.users.update({_id: Meteor.userId()}, {$set: {"profile.avatars.large": res._id}});
+			});
 		});
 
 	},

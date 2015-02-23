@@ -14,9 +14,9 @@ Meteor.users.helpers({
 	},
 	'avatarLargeUrl': function() {
 		if (! this.profile.avatars.large)
-			return ;		
+			return;
 
-		return Images.findOne(this.profile.avatars.large).url;
+		return Images.findOne(this.profile.avatars.large).directUrl();
 	}
 });
 
