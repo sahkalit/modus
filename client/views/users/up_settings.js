@@ -3,7 +3,7 @@ Template.upSettings.helpers({
 		return this.emails.length && this.emails[0].address;
 	},
 	'avatar': function() {
-		return this.avatarLargeUrl();
+		return Images.find({_id: this.profile.avatars.large});
 	}
 });
 
@@ -11,11 +11,12 @@ Template.upSettings.events({
 	'change .upload-photo': function(event, template) {
 		FS.Utility.eachFile(event, function(file) {
 			var fileObj = Images.insert(file, function(err, res) {
-				console.log(res);
+				if (err)
+					throw new Meteor.Error(err);
+
 				Meteor.users.update({_id: Meteor.userId()}, {$set: {"profile.avatars.large": res._id}});
 			});
 		});
-
 	},
 	'click input.btn-primary': function(e) {
 		e.preventDefault();

@@ -1,6 +1,11 @@
+console.log(Meteor.isServer ? process.env.SECRET_ACCESS_KEY : '');
+console.log(Meteor.isServer ? process.env.ACCESS_KEY_ID : '');
+
 var imageStore = new FS.Store.S3("images", {
-	accessKeyId: "AKIAJ644ESIAQVY7QPRQ", //required if environment variables are not set
-	secretAccessKey: "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", //required if environment variables are not set
+
+
+	accessKeyId: Meteor.isServer ? process.env.ACCESS_KEY_ID : '',//required if environment variables are not set
+	secretAccessKey:  Meteor.isServer ? process.env.SECRET_ACCESS_KEY : '', //required if environment variables are not set
 	bucket: "modus-avatars", //required 
 	ACL: "public-read",
 	region: "us-west-2",
@@ -27,8 +32,10 @@ Images = new FS.Collection("images", {
 	// }
 });
 
-FS.File.prototype.directUrl = function() {
+FS.File.prototype.directUrl = function() {	
 	 var copy = this.getCopyInfo('images');
+	 if (! copy)
+	 	return null;
 	 var urlHost = 'https://s3-' + imageStore.region + '.amazonaws.com';
 	 return urlHost + '/' + [imageStore.bucket, copy.key].join('/');
 };

@@ -27,3 +27,4 @@ cfs:filesystem
 cfs:standard-packages
 cfs:s3
 mrt:smart-publish
+cfs:ui

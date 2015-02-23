@@ -16,7 +16,7 @@ Meteor.users.helpers({
 		if (! this.profile.avatars.large)
 			return;
 
-		return Images.findOne(this.profile.avatars.large).directUrl();
+		return Images.find({_id: this.profile.avatars.large});
 	}
 });
 
@@ -153,3 +153,19 @@ if (Meteor.isServer) {
 		}
 	});
 }
+
+Meteor.methods({
+	'saveAvatar': function(imageId) {
+		check(message, Match.Any);
+		
+		message.createdAt = Date.now();
+		message.creatorId = this.userId;
+		message.notRead = _.without(message.userIds,  this.userId);
+
+		Chats.update({_id: message.chatId}, {
+			$set: {modifiedAt: Date.now()}, $inc: {countMessages: 1}
+		});
+
+		return Messages.insert(message);
+	}
+});
