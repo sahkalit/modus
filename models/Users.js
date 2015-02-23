@@ -1,3 +1,27 @@
+Meteor.users.helpers({
+	'age': function() {		
+		if (! this.profile.birthday)
+			return;
+
+		var today = new Date();
+		var birthDate = new Date(this.profile.birthday);
+		var age = today.getFullYear() - birthDate.getFullYear();
+		var m = today.getMonth() - birthDate.getMonth();
+		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+			age--;
+		}
+		return age;
+	},
+	'avatarLargeUrl': function() {
+		if (! this.profile.avatars.large)
+			return ;		
+
+		return Images.findOne(this.profile.avatars.large).url;
+	}
+});
+
+
+
 Schema = {};
 
 Schema.UserCountry = new SimpleSchema({
@@ -7,6 +31,17 @@ Schema.UserCountry = new SimpleSchema({
 	code: {
 		type: String,
 		regEx: /^[A-Z]{2}$/
+	}
+});
+
+Schema.Avatars = new SimpleSchema({
+	large: {
+		type: String,
+		optional: true
+	},
+	small: {
+		type: String,
+		optional: true
 	}
 });
 
@@ -55,6 +90,10 @@ Schema.UserProfile = new SimpleSchema({
 	location: {
 		type: String,
 		optional: true
+	},
+	avatars: {
+		type: Schema.Avatars,
+		optional: true
 	}
 });
 
@@ -87,27 +126,11 @@ Schema.User = new SimpleSchema({
 		type: Object,
 		optional: true,
 		blackbox: true
-	},    
+	}
 });
 
 Meteor.users.attachSchema(Schema.User);
 
-
-Meteor.users.helpers({
-	'age': function() {
-		if (! this.profile.birthday)
-			return;
-
-		var today = new Date();
-		var birthDate = new Date(this.profile.birthday);
-		var age = today.getFullYear() - birthDate.getFullYear();
-		var m = today.getMonth() - birthDate.getMonth();
-		if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-			age--;
-		}
-		return age;
-	}
-});
 
 
 // Collection2 already does schema checking
@@ -118,7 +141,12 @@ if (Meteor.isServer) {
 			return false;	
 		},
 		update : function (userId, doc, fieldNames, modifier) {
-			return doc._id === userId;			
+			check(userId, Match.Any);
+			check(doc, Match.Any);
+			check(fieldNames, Match.Any);
+			check(modifier, Match.Any);
+
+			return doc._id === userId;
 		},
 		remove : function () {
 			return false;

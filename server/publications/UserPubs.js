@@ -10,3 +10,8 @@ Meteor.publish("usersByIds", function(userIds){
 Meteor.publish("usersNear", function(){	
 	return Meteor.users.find();
 });
+
+
+Meteor.publish("images", function(){
+	return Images.find();
+});
