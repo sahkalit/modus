@@ -22,6 +22,7 @@ cfs:collection-filters@0.2.3
 cfs:data-man@0.0.4
 cfs:file@0.1.15
 cfs:filesystem@0.1.1
+cfs:graphicsmagick@0.0.17
 cfs:http-methods@0.0.27
 cfs:http-publish@0.0.13
 cfs:power-queue@0.9.11
@@ -38,6 +39,7 @@ check@1.0.4
 chuangbo:cookie@1.1.0
 coffeescript@1.0.5
 dburles:collection-helpers@1.0.2
+dburles:google-maps@1.0.8
 ddp@1.0.14
 deps@1.0.6
 ejson@1.0.5
@@ -92,6 +94,7 @@ retry@1.0.2
 routepolicy@1.0.4
 sacha:spin@2.0.4
 service-configuration@1.0.3
+servicelocale:username-blacklist@1.0.0
 session@1.0.5
 sha@1.0.2
 spacebars@1.0.5

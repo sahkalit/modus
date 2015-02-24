@@ -1,19 +1,19 @@
 Template.upSettings.helpers({
-	'email': function() {
-		return this.emails.length && this.emails[0].address;
+	'email': function() {		
+		return this.emails ?  (this.emails.length && this.emails[0].address) : '';
 	},
 	'avatar': function() {
-		return Images.find({_id: this.profile.avatars.large});
+		return Avatars.find({_id: this.profile.avatars.large});
 	}
 });
 
 Template.upSettings.events({
 	'change .upload-photo': function(event, template) {
 		FS.Utility.eachFile(event, function(file) {
-			var fileObj = Images.insert(file, function(err, res) {
+			var fileObj = Avatars.insert(file, function(err, res) {
 				if (err)
 					throw new Meteor.Error(err);
-
+				
 				Meteor.users.update({_id: Meteor.userId()}, {$set: {"profile.avatars.large": res._id}});
 			});
 		});

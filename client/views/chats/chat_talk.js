@@ -38,20 +38,35 @@ Template.chatTalk.events({
   }
 });
 
+Template.chatTalk.rendered = function() {
+	if (! this.data)
+		return;
+
+	Meteor.call('messagesNotifyRead', this.data.chat()._id);
+};
+
 Template.chatTalk.created = function() {
 	var instance = this;
 	this.limitStep = 5;
 	this.limit = new ReactiveVar(this.limitStep);	
 	this.ready =  new ReactiveVar(false);
 	this.discardCreatedAt = new ReactiveVar(false);
+
+	if (! instance.data)
+		return;
+
 	var subscription = Meteor.subscribe('messagesByChatDiscard', instance.data.chat()._id, instance.limit.get());
 	this.autorun(function(c) {			
 		if (subscription.ready()) {
-			var message = Messages.findOne({chatId: instance.data.chat()._id}, {sort: {createdAt: 1}});
+			var message = Messages.findOne({chatId: instance.data.chat()._id}, {sort: {createdAt: 1}});	
 			if (message)
 				instance.discardCreatedAt.set(message.createdAt);
-			else
-				instance.discardCreatedAt.set(Date.now());
+			else {
+				var d = new Date();
+				d.setDate(d.getDate() - 1);
+
+				instance.discardCreatedAt.set(d.getTime());
+			}
 			
 			c.stop();
 		}
@@ -77,9 +92,15 @@ Template.chatTalk.helpers({
 		return Template.instance().messages;
 	},	
 	hasMoreMessages: function() {
+		if (! Template.instance().data)
+			return false;
+
 		return Template.instance().messages.count() >= Template.instance().limit.get();
 	},
 	isReady: function() {
+		if (! Template.instance().data)
+			return true;
+
 		return Template.instance().ready.get();
 	}
 });

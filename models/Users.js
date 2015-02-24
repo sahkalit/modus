@@ -37,11 +37,13 @@ Schema.UserCountry = new SimpleSchema({
 Schema.Avatars = new SimpleSchema({
 	large: {
 		type: String,
-		optional: true
+		optional: true,
+		defaultValue: ''
 	},
 	small: {
 		type: String,
-		optional: true
+		optional: true,
+		defaultValue: ''
 	}
 });
 
@@ -120,7 +122,8 @@ Schema.User = new SimpleSchema({
 	},
 	profile: {
 		type: Schema.UserProfile,
-		optional: true
+		optional: true,
+		defaultValue: {}
 	},
 	services: {
 		type: Object,

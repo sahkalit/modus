@@ -4,20 +4,28 @@
 		 <div class="profile">
 			<div class="col-sm-12">
 				<div class="col-xs-12 col-sm-8">
-					<h2>{{profile.firstName}} {{profile.lastName}}</h2>                    
+					<h2>{{profile.firstName}} {{profile.lastName}}</h2>
 					<p><strong>{{_ 'user_profile_gender'}}: </strong> {{profile.gender}} </p>
 					<p><strong>{{_ 'user_profile_age'}}: </strong> {{profile.age}}</p>
 					<p><strong>{{_ 'user_profile_about'}}: </strong> {{profile.about}} </p>
-				</div>             
+				</div>
 				<div class="col-xs-12 col-sm-4 text-center">
 					<figure>
-						<img src="http://www.localcrimenews.com/wp-content/uploads/2013/07/default-user-icon-profile.png" alt="" class="img-circle img-responsive">
+						
+
+						{{#each avatar}}
+							{{#unless this.directUrl}}
+								{{> FS.UploadProgressBar}}
+							{{else}}
+								<img src="{{this.directUrl}}" alt="" class="img-circle img-responsive">
+							{{/unless}}
+						{{/each}}
 					</figure>
 				</div>
-			</div>            
-			<div class="col-xs-12 divider text-center">                
-				<div class="col-xs-12 col-sm-4 emphasis">					
-					<div class="btn-group dropup btn-block">						
+			</div>
+			<div class="col-xs-12 divider text-center">
+				<div class="col-xs-12 col-sm-4 emphasis">
+					<div class="btn-group dropup btn-block">
 						<button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown">
 						Actions
 						<span class="caret"></span>

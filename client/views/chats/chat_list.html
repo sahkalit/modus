@@ -10,7 +10,13 @@
 					<div class="media-body">
 						<div class="media">
 							<a class="pull-left" href="#">
-								<img class="media-object img-circle" style="max-height:40px;" src="/image/userImg">
+								{{#each avatar}}
+									{{#unless this.directUrl 'avatarsSmall'}}
+										{{> FS.UploadProgressBar}}
+									{{else}}
+										<img class="media-object img-circle" src="{{this.directUrl 'avatarsSmall'}}" />										
+									{{/unless}}
+								{{/each}}
 							</a>
 							<div class="media-body">							
 								{{#with interlocutor}}

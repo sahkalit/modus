@@ -22,7 +22,7 @@ Meteor.publish('chatByUsers', function (userIds) {
 	if (-1 === userIds.indexOf(this.userId))
 		throw new Meteor.Error(403, 'Cannot create chat for other users');
 
-	var chats = Chats.queries.chatByUsers(this.userId, userIds);
+	var chats = Chats.queries.chatByUsers(userIds);
 	if (0 === chats.count()) {
 		if (Meteor.users.find({_id: {$in: _.uniq(userIds)}}).count() !== _.uniq(userIds).length)
 			this.error(404, 'Users [' + userIds.join() + '] not found');
@@ -37,7 +37,7 @@ Meteor.publish('chatByUsers', function (userIds) {
 	}
 	
 	return [
-		Chats.queries.chatByUsers(this.userId, userIds),
+		Chats.queries.chatByUsers(userIds),
 		Meteor.users.find({_id: {$in: userIds}})
 	];
 });

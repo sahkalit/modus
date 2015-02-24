@@ -67,8 +67,7 @@ if (Meteor.isServer) {
 
 Meteor.methods({
 	'sendMessage': function(message) {
-		check(message, Match.Any);
-		
+		check(message, Match.Any);		
 		message.createdAt = Date.now();
 		message.creatorId = this.userId;
 		message.notRead = _.without(message.userIds,  this.userId);
@@ -78,5 +77,8 @@ Meteor.methods({
 		});
 
 		return Messages.insert(message);
+	},
+	'messagesNotifyRead': function(chatId) {
+		Messages.update({ chatId: chatId, notRead: { $in: [this.userId] }}, { $pull: { notRead: this.userId }}, { multi: true });
 	}
 });

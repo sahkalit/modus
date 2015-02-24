@@ -28,3 +28,6 @@ cfs:standard-packages
 cfs:s3
 mrt:smart-publish
 cfs:ui
+cfs:graphicsmagick
+servicelocale:username-blacklist
+dburles:google-maps

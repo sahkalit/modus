@@ -7,11 +7,11 @@ Chats.helpers({
 	creator: function() {
 		return Meteor.users.findOne({_id: this.creatorId})
 	},
-	interlocutor: function() {		
-		return Meteor.users.findOne({_id: _.without(this.userIds, [Meteor.userId()])[0]}) || Meteor.user();
+	interlocutor: function() {
+		return Meteor.users.findOne({_id: _.without(this.userIds, Meteor.userId())[0] || Meteor.userId()});
 	},
 	interlocutorId: function() {		
-		return _.without(this.userIds, [Meteor.userId()])[0] || Meteor.userId();
+		return _.without(this.userIds, Meteor.userId())[0] || Meteor.userId();
 	}
 });
 
@@ -39,13 +39,13 @@ Chats.attachSchema(
 );
 	
 Chats.queries = {
-	chatByUsers: function (creatorId, userIds) {
+	chatByUsers: function (userIds) {
 		userIds = _.uniq(userIds);
 
 		check(userIds, [String]);
 		return Chats.find({
 			$and: [
-				{creatorId: creatorId},
+				{creatorId: {$in: userIds}},
 				{userIds: {$all: userIds}},
 				{userIds: {$size: userIds.length}}
 			]
