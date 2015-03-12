@@ -15,5 +15,20 @@ Meteor.startup(function () {
 			// Handle the situation
 			console.log(error_message);
 	});
+
+
+	MapMessages.find().observe({
+		add: function(document) {
+			console.log(document);
+
+	
+		},
+		removed: function(document) {
+			console.log("ssss");
+		},
+		changed: function(document) {
+			console.log('ggg');
+		}
+	});
 });
 

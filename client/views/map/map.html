@@ -1,5 +1,29 @@
 <template name="map">
 	<div class="map-container">
-    	{{> googleMap name="exampleMap" options=exampleMapOptions}}
+		{{> googleMap name="exampleMap" options=exampleMapOptions}}		
+	</div>
+	<div class="modal fade bs-example-modal-sm" id="modal-sending-message" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title" id="exampleModalLabel">New message</h4>
+					</div>
+					<div class="modal-body">
+						<form>
+							<input type="hidden" name="modal-message-lat" id="modal-message-lat"/>
+							<input type="hidden" name="modal-message-lng" id="modal-message-lng"/>
+							<div class="form-group">
+								<label for="message-text" class="control-label">Message:</label>
+								<textarea class="form-control" id="map-message-text"></textarea>
+							</div>
+						</form>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						<button type="button" class="btn btn-primary send-map-message">Send message</button>
+					</div>
+			</div>
+		</div>
 	</div>
 </template>
