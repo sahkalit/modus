@@ -13,11 +13,5 @@ Accounts.ui.config({
 		inputType: 'text',
 		visible: true,
 		saveToProfile: true
-	}, {
-		fieldName: 'terms',
-		fieldLabel: 'I accept <a href="/conditions">the terms and conditions</a>',
-		inputType: 'checkbox',
-		visible: true,
-		saveToProfile: false
 	}]
 });

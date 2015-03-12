@@ -41,8 +41,12 @@ Template.chatTalk.events({
 Template.chatTalk.rendered = function() {
 	if (! this.data)
 		return;
-
-	Meteor.call('messagesNotifyRead', this.data.chat()._id);
+	var instance = Template.instance();
+	Messages.find({chatId: this.data.chat()._id, notRead: {$in: [Meteor.userId()]}}).observe({
+		added: function(document) {
+			Meteor.call('messagesNotifyRead', instance.data.chat()._id);
+		}
+	});	
 };
 
 Template.chatTalk.created = function() {

@@ -13,6 +13,12 @@ Messages.helpers({
 		return Meteor.users.findOne(
 			{_id: this.creatorId}
 		);
+	},
+	creatorName: function() {
+		return Meteor.users.findOne({_id: this.creatorId}).username;
+	}, 
+	dateStr: function() {
+		return new Date(this.createdAt);
 	}
 });
 
